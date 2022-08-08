@@ -28,12 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        System.out.println(keyCode);
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
+        if (keyCode == KeyEvent.KEYCODE_MENU | keyCode==KeyEvent.KEYCODE_CTRL_LEFT) {
             Edit.show();
         }
-
         return super.onKeyDown(keyCode, event);
     }
 
