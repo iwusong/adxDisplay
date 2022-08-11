@@ -6,19 +6,27 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.Toast;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cn.dafeng.adx.esop.utils.InitUtil;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    AlertDialog Edit;
+    public AlertDialog Edit;
 
 
-    protected final String IPADDRESS = "192.168.0.100";
+    protected final String IPADDRESS = "10.96.107.13";
+    protected final int port = 80;
+    protected final String path = "/g/c.html?id=";
+
+
+    private int backNum = 0;
+    private Date backTime = new Date();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +44,29 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
         if (keyCode == KeyEvent.KEYCODE_MENU | keyCode == KeyEvent.KEYCODE_CTRL_LEFT) {
             Edit.show();
         }
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            final long timeDifference = new Date().getTime() - backTime.getTime();
+            if (timeDifference < 1000) {
+                System.out.println(backNum);
+                backNum++;
+            } else {
+                System.out.println(backNum);
+                backTime = new Date();
+                backNum = 0;
+            }
+            if (backNum >= 2) {
+                System.out.println(backNum);
+                return super.onKeyDown(keyCode, event);
+            }
+            return true;
+        }
+
+
         return super.onKeyDown(keyCode, event);
     }
 
@@ -53,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String getUrl() {
-        return "http://" + IPADDRESS + "/g/c.html?id=" + getId();
+        return "http://" + IPADDRESS + ":" + port + path + getId();
     }
 
     protected void testInternet() {
@@ -88,9 +116,17 @@ public class MainActivity extends AppCompatActivity {
         if (!getId().equals("null")) {
             Intent intent = new Intent(this, WebEsop.class);
             intent.putExtra("url", getUrl());
-            startActivity(intent);
+            startActivityForResult(intent, 1);
         } else {
             runOnUiThread(() -> Edit.show());
         }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Edit.show();
+        System.out.println("result");
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

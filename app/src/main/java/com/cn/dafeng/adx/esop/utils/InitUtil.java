@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.webkit.CookieManager;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
+import android.webkit.*;
 import android.widget.Button;
 import android.widget.EditText;
 import com.cn.dafeng.adx.esop.MainActivity;
@@ -60,5 +58,9 @@ public class InitUtil {
         settings.setDatabaseEnabled(true);   //开启 database storage API 功能
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);
+        webView.setWebChromeClient(
+                new WebChromeClient()
+        );
+        webView.setWebViewClient(new WebViewClient());
     }
 }
