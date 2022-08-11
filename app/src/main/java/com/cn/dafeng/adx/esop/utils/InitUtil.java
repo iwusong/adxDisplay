@@ -1,14 +1,21 @@
 package com.cn.dafeng.adx.esop.utils;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 import android.webkit.*;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import com.cn.dafeng.adx.esop.MainActivity;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -63,4 +70,6 @@ public class InitUtil {
         );
         webView.setWebViewClient(new WebViewClient());
     }
+
+
 }

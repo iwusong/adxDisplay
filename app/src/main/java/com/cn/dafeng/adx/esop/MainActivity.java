@@ -16,10 +16,7 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-
     public AlertDialog Edit;
-
-
     protected final String IPADDRESS = "10.96.107.13";
     protected final int port = 80;
     protected final String path = "/g/c.html?id=";
@@ -33,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toast.makeText(this, "当前的id为" + getId(), Toast.LENGTH_SHORT).show();
-
         testInternet();
         Edit = InitUtil.initAlertDialog(this);
         if (getId().equals("null")) {
@@ -100,14 +96,15 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 runOnUiThread(() -> Toast.makeText(this, "服务器未连接", Toast.LENGTH_SHORT).show());
                             }
-                            Thread.sleep(3000);
-                        } catch (IOException | InterruptedException e) {
+                        } catch (IOException e) {
                             runOnUiThread(() -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
-                            break;
+                        }
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
-
-
                 }
         ).start();
     }
