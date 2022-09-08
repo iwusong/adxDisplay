@@ -1,6 +1,7 @@
 package com.cn.dafeng.adx.esop;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -44,25 +45,49 @@ public class MainActivity extends AppCompatActivity {
         if (keyCode == KeyEvent.KEYCODE_MENU | keyCode == KeyEvent.KEYCODE_CTRL_LEFT) {
             Edit.show();
         }
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
 
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_MUTE) {
             final long timeDifference = new Date().getTime() - backTime.getTime();
             if (timeDifference < 1000) {
-                System.out.println(backNum);
                 backNum++;
             } else {
-                System.out.println(backNum);
                 backTime = new Date();
                 backNum = 0;
             }
+            //            执行操作
             if (backNum >= 2) {
-                System.out.println(backNum);
+                backTime = new Date();
+                backNum = 0;
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                ComponentName componentName = new ComponentName("com.example.hlauncher", "com.example.hlauncher.MainActivity");
+                intent.setComponent(componentName);
+                startActivity(intent);
+                finish();
                 return super.onKeyDown(keyCode, event);
             }
             return true;
         }
 
-
+        if (keyCode == KeyEvent.KEYCODE_DEL) {
+            final long timeDifference = new Date().getTime() - backTime.getTime();
+            if (timeDifference < 1000) {
+                backNum++;
+            } else {
+                backTime = new Date();
+                backNum = 0;
+            }
+            //            执行操作
+            if (backNum >= 2) {
+                backTime = new Date();
+                backNum = 0;
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                ComponentName componentName = new ComponentName("com.charon.rocketfly", "com.charon.rocketfly.RocketActivity");
+                intent.setComponent(componentName);
+                startActivity(intent);
+                return super.onKeyDown(keyCode, event);
+            }
+            return true;
+        }
         return super.onKeyDown(keyCode, event);
     }
 
