@@ -17,12 +17,10 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    public AlertDialog Edit;
-    protected final String IPADDRESS = "10.96.107.13";
+    protected final String IPADDRESS = "192.168.16.85";
     protected final int port = 80;
-    protected final String path = "/g/c.html?id=";
-
-
+    protected final String path = "/g/receive.html?id=";
+    public AlertDialog Edit;
     private int backNum = 0;
     private Date backTime = new Date();
 
@@ -30,9 +28,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toast.makeText(this, "当前的id为" + getId(), Toast.LENGTH_SHORT).show();
+        Bundle bundle = getIntent().getExtras();
+
         testInternet();
         Edit = InitUtil.initAlertDialog(this);
+        if (bundle != null) {
+            String value1 = bundle.getString("code");
+            InitUtil.setId(this, value1);
+            Toast.makeText(this, value1, Toast.LENGTH_SHORT).show();
+        }
+        Toast.makeText(this, "当前的id为" + getId(), Toast.LENGTH_SHORT).show();
+
         if (getId().equals("null")) {
             Edit.show();
         }
@@ -106,32 +112,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void testInternet() {
-        new Thread(
-                () -> {
-                    while (true) {
-                        try {
-                            InetAddress host = InetAddress.getByName(IPADDRESS);
-                            boolean reachable = host.isReachable(3000);
-                            if (reachable) {
-                                runOnUiThread(() -> {
-                                    Toast.makeText(this, "服务器已连接", Toast.LENGTH_SHORT).show();
-                                    goEsop();
-                                });
-                                break;
-                            } else {
-                                runOnUiThread(() -> Toast.makeText(this, "服务器未连接", Toast.LENGTH_SHORT).show());
-                            }
-                        } catch (IOException e) {
-                            runOnUiThread(() -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
-                        }
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+        new Thread(() -> {
+            while (true) {
+                try {
+                    InetAddress host = InetAddress.getByName(IPADDRESS);
+                    boolean reachable = host.isReachable(3000);
+                    if (reachable) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "服务器已连接", Toast.LENGTH_SHORT).show();
+                            goEsop();
+                        });
+                        break;
+                    } else {
+                        runOnUiThread(() -> Toast.makeText(this, "服务器未连接", Toast.LENGTH_SHORT).show());
                     }
+                } catch (IOException e) {
+                    runOnUiThread(() -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
                 }
-        ).start();
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     public void goEsop() {
